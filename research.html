@@ -43,10 +43,13 @@
     .breadcrumb { font-family: var(--f-display); font-size: .68rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: .8rem; }
     .breadcrumb a { color: var(--gold); text-decoration: none; }
     .breadcrumb a::after { content: ' /'; color: var(--text-3); margin: 0 .4rem; }
-    .page-hero h1 { font-family: var(--f-display); font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -.03em; color: var(--text); line-height: 1.1; }
+    .page-hero h1 { font-family: var(--f-display); font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -.03em; color: var(--text); line-height: 1.1; margin-bottom: 1.2rem; }
+    .page-hero .intro { font-size: .95rem; color: var(--text-2); max-width: 640px; line-height: 1.8; }
+    .page-hero .intro p + p { margin-top: .6rem; }
+    .page-hero .intro strong { color: var(--text); font-weight: 500; }
 
     .main { max-width: var(--max-w); margin: 0 auto; padding: 0 2.5rem 6rem; }
-    .section + .section { margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
+    .section + .section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
     .eyebrow { font-family: var(--f-display); font-size: .68rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
 
     .product-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -62,6 +65,8 @@
       color: var(--text); letter-spacing: -.01em; line-height: 1.35; margin-bottom: .3rem;
     }
     .product-meta { font-size: .78rem; color: var(--text-3); }
+    .product-authors { font-size: .8rem; color: var(--text-2); margin-bottom: .35rem; line-height: 1.55; }
+    .product-authors strong { color: var(--text); font-weight: 600; }
     .product-link {
       flex-shrink: 0; font-family: var(--f-display); font-size: .72rem; font-weight: 600;
       letter-spacing: .04em; text-decoration: none; padding: .5rem .9rem; border-radius: 5px;
@@ -97,13 +102,24 @@
     <li><a href="index.html#about">About</a></li>
     <li><a href="research.html" class="active">Research</a></li>
     <li><a href="outreach.html">Outreach</a></li>
-    <li><a href="./assets/Theo_Olsen_CV_June_2026.docx.pdf" target="_blank" class="nav-cv">CV ↓</a></li>
+    <li><a href="./assets/Theo_Olsen_CV_June_2026.docx.pdf" target="_blank" class="nav-cv">CV</a></li>
   </ul>
 </nav>
 
 <header class="page-hero">
   <p class="breadcrumb"><a href="index.html">Theo Olsen</a> Research</p>
   <h1>Research</h1>
+  <div class="intro">
+    <p>
+      I'm interested in <strong>protoplanetary disks</strong>, the
+      physics and chemistry of <strong>brown dwarf atmospheres</strong>, and using observational
+      data to learn how planets and substellar objects form and evolve.
+    </p>
+    <p>
+      I currently work with the <strong>BDNYC</strong> group at the American Museum of Natural History,
+      contributing to the <strong>SEDA</strong> software package and studying brown dwarf atmospheres.
+    </p>
+  </div>
 </header>
 
 <main class="main">
@@ -115,6 +131,7 @@
       <article class="product">
         <div class="product-info">
           <h2 class="product-title">SEDA: Spectral Energy Distribution Analyzer for Forward Modeling and Empirical Analysis of Ultracool Objects</h2>
+          <p class="product-authors">Genaro Suárez Castro, Kelle Cruz, Jacqueline K. Faherty, Rocio Kiman, Stanimir Metchev, Natalia Oliveros-Gomez, Efrain Alvarado III, <strong>Theodor Olsen</strong>, et al.</p>
           <p class="product-meta">Journal of Open Source Software · 2026</p>
         </div>
         <a href="./assets/seda_paper_jun_16.pdf" target="_blank" class="product-link link-paper">View PDF →</a>
@@ -123,6 +140,7 @@
       <article class="product">
         <div class="product-info">
           <h2 class="product-title">Disk-tective Work: The Link Between Inner Disk Gas and Terrestrial Planet Formation</h2>
+          <p class="product-authors"><strong>Theodor Olsen</strong></p>
           <p class="product-meta">KNAC Undergraduate Symposium Proceedings · 2024</p>
         </div>
         <a href="./assets/disk_tective_knac_2024.pdf" target="_blank" class="product-link link-paper">View PDF →</a>
@@ -138,6 +156,7 @@
       <article class="product">
         <div class="product-info">
           <h2 class="product-title">Disk-tective Work: The Link Between Inner Disk Gas and Terrestrial Planet Formation</h2>
+          <p class="product-authors"><strong>Theodor Olsen</strong></p>
           <p class="product-meta">URSI Symposium · Vassar College · Sept 2024</p>
         </div>
         <a href="./assets/URSI_41_AnnieDickson-Vandervelde_TheoOlsen.pptx.pdf" target="_blank" class="product-link link-poster">View PDF →</a>
