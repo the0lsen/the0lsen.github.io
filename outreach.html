@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outreach — Theo Olsen</title>
+  <meta name="description" content="Outreach and public engagement by Theo Olsen — observatory nights, journal club, science games, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-0: #04070f; --bg-1: #07101d; --bg-2: #0b1626; --bg-card: #0e1c30;
+      --gold: #dfa832; --gold-soft: rgba(223,168,50,.1); --gold-border: rgba(223,168,50,.2);
+      --purple: #9d7ff0; --blue: #5b9cf6; --teal: #3ecfb0; --rose: #f07070; --cyan: #67e8f9;
+      --text: #edf2ff; --text-2: #8fa3c4; --text-3: #415068;
+      --border: rgba(140,160,200,.09); --border-bright: rgba(140,160,200,.16);
+      --nav-h: 62px; --f-display: 'Space Grotesk', sans-serif; --f-body: 'Inter', sans-serif;
+      --radius: 10px; --max-w: 980px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg-0); color: var(--text); font-family: var(--f-body); line-height: 1.65; overflow-x: hidden; }
+
+    #nav {
+      position: fixed; top:0; left:0; right:0; height: var(--nav-h); z-index: 200;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem;
+      background: rgba(4,7,15,.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--f-display); font-weight: 700; font-size: .95rem; letter-spacing: .12em; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: var(--f-display); font-size: .82rem; font-weight: 500; letter-spacing: .03em; color: var(--text-2); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-cv { color: var(--gold) !important; border: 1px solid var(--gold-border); padding: .35rem 1rem; border-radius: 5px; }
+    .nav-cv:hover { background: var(--gold-soft) !important; }
+
+    .page-hero { padding: calc(var(--nav-h) + 5rem) 2.5rem 5rem; max-width: var(--max-w); margin: 0 auto; }
+    .breadcrumb { font-family: var(--f-display); font-size: .68rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: .8rem; }
+    .breadcrumb a { color: var(--gold); text-decoration: none; }
+    .breadcrumb a::after { content: ' /'; color: var(--text-3); margin: 0 .4rem; }
+    .page-hero h1 { font-family: var(--f-display); font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -.03em; color: var(--text); line-height: 1.1; margin-bottom: 1.2rem; }
+    .page-hero h1 span { color: var(--teal); }
+    .page-hero .sub { font-size: .95rem; color: var(--text-2); max-width: 600px; line-height: 1.8; }
+    .page-hero .sub strong { color: var(--text); font-weight: 500; }
+
+    .phil-bar {
+      border-left: 3px solid var(--gold);
+      padding: 1.2rem 2.5rem 1.2rem calc(2.5rem + 1.4rem);
+      background: var(--gold-soft);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      max-width: var(--max-w); margin: 0 auto 0;
+    }
+    .phil-bar p { font-size: .9rem; color: var(--text-2); font-style: italic; line-height: 1.75; }
+    .phil-bar p strong { color: var(--text); font-style: normal; font-weight: 500; }
+
+    .cards-section { max-width: var(--max-w); margin: 0 auto; padding: 5rem 2.5rem 7rem; }
+    .eyebrow { font-family: var(--f-display); font-size: .68rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: .7rem; }
+    .section-h { font-family: var(--f-display); font-size: clamp(1.3rem,3vw,1.75rem); font-weight: 700; letter-spacing: -.02em; color: var(--text); margin-bottom: 2.5rem; }
+
+    .outreach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 1.4rem; }
+
+    .o-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2rem 2rem 1.6rem; display: flex; flex-direction: column;
+      transition: border-color .3s, transform .25s; position: relative; overflow: hidden;
+    }
+    .o-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+    .o-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .o-card.accent-gold::before   { background: var(--gold); }
+    .o-card.accent-purple::before { background: var(--purple); }
+    .o-card.accent-teal::before   { background: var(--teal); }
+    .o-card.accent-blue::before   { background: var(--blue); }
+    .o-card.accent-rose::before   { background: var(--rose); }
+    .o-card.accent-cyan::before   { background: var(--cyan); }
+
+    a.o-card {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .o-icon { font-size: 1.9rem; margin-bottom: .9rem; display: block; }
+    .o-role { font-family: var(--f-display); font-size: .63rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .45rem; }
+    .o-card.accent-gold   .o-role { color: var(--gold); }
+    .o-card.accent-purple .o-role { color: var(--purple); }
+    .o-card.accent-teal   .o-role { color: var(--teal); }
+    .o-card.accent-blue   .o-role { color: var(--blue); }
+    .o-card.accent-rose   .o-role { color: var(--rose); }
+    .o-card.accent-cyan   .o-role { color: var(--cyan); }
+
+    .o-title { font-family: var(--f-display); font-size: 1rem; font-weight: 600; color: var(--text); letter-spacing: -.015em; margin-bottom: .28rem; line-height: 1.3; }
+    .o-org { font-family: var(--f-display); font-size: .73rem; color: var(--text-3); margin-bottom: 1rem; }
+    .o-desc { font-size: .87rem; color: var(--text-2); line-height: 1.78; flex: 1; }
+    .o-desc strong { color: var(--text); font-weight: 500; }
+
+    .o-coming { font-family: var(--f-display); font-size: .68rem; color: var(--text-3); margin-top: 1.1rem; font-style: italic; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+    .contact-strip {
+      max-width: var(--max-w); margin: 0 auto; padding: 4rem 2.5rem 6rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;
+    }
+    .contact-strip h2 { font-family: var(--f-display); font-size: 1.45rem; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
+    .contact-strip p { font-size: .88rem; color: var(--text-2); margin-top: .4rem; }
+    .btn { font-family: var(--f-display); font-size: .78rem; font-weight: 600; letter-spacing: .04em; padding: .7rem 1.5rem; border-radius: 6px; text-decoration: none; transition: all .2s; display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; }
+    .btn-gold { background: var(--gold); color: #060a14; }
+    .btn-gold:hover { background: #f0b832; }
+    .btn-ghost { border: 1px solid var(--border-bright); color: var(--text-2); }
+    .btn-ghost:hover { border-color: var(--text-2); color: var(--text); }
+
+    footer { padding: 2.8rem 2.5rem; text-align: center; border-top: 1px solid var(--border); font-family: var(--f-display); font-size: .7rem; letter-spacing: .04em; color: var(--text-3); }
+    footer a { color: var(--text-3); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--gold); }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-0); }
+    ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+    @media (max-width: 700px) {
+      #nav { padding: 0 1.2rem; }
+      .nav-links { gap: 1.4rem; }
+      .nav-links li:first-child { display: none; }
+      .page-hero, .cards-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .phil-bar { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .outreach-grid { grid-template-columns: 1fr; }
+      .contact-strip { flex-direction: column; align-items: flex-start; padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">T·O</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="outreach.html" class="active">Outreach</a></li>
+    <li><a href="./assets/Theo_Olsen_CV_June_2026.docx.pdf" target="_blank" class="nav-cv">CV ↓</a></li>
+  </ul>
+</nav>
+
+<header class="page-hero">
+  <p class="breadcrumb"><a href="index.html">Theo Olsen</a> Outreach</p>
+  <h1>Science is best when it's <span>shared</span></h1>
+  <p class="sub">
+    I am involved in several science outreach and community activities at Vassar College
+    and beyond. I believe that making astronomy accessible to people outside the
+    research community is an important part of being a scientist.
+  </p>
+</header>
+
+<div class="cards-section">
+  <p class="eyebrow">Activities</p>
+  <h2 class="section-h">How I Engage</h2>
+
+  <div class="outreach-grid">
+
+    <!-- Observatory -->
+    <div class="o-card accent-gold">
+      <span class="o-icon">🔭</span>
+      <div class="o-role">Observatory Host</div>
+      <div class="o-title">Vassar College Observatory Open Nights</div>
+      <div class="o-org">Vassar College · Poughkeepsie, NY · 2023–Present</div>
+      <p class="o-desc">
+        I help host <strong>weekly public observing sessions</strong> at the Vassar College Observatory,
+        where I teach students, faculty, and community members about the night sky.
+        I also participate in the <strong>TESS Follow-Up Observing Program (TFOP)</strong>,
+        contributing ground-based photometric observations of planet candidates from NASA's
+        TESS mission to help distinguish transiting planets from astrophysical false positives.
+      </p>
+    </div>
+
+    <!-- Journal Club -->
+    <div class="o-card accent-purple">
+      <span class="o-icon">📰</span>
+      <div class="o-role">Co-President &amp; Founder</div>
+      <div class="o-title">Physics &amp; Astronomy Journal Club</div>
+      <div class="o-org">Vassar College · 2024–Present</div>
+      <p class="o-desc">
+        I co-lead the Vassar Physics &amp; Astronomy Journal Club,
+        which runs a <strong>weekly paper discussion group</strong> and a
+        <strong>campus-wide public lecture series</strong> on advances in physics and astronomy.
+        The club is open to students at all levels.
+      </p>
+    </div>
+
+    <!-- Fourier Wave Visualizer -->
+    <a href="fourier/index.html" class="o-card accent-cyan">
+      <span class="o-icon">〰️</span>
+      <div class="o-role">Creator</div>
+      <div class="o-title">Fourier Wave Visualizer</div>
+      <div class="o-org">Independent Project · 2025–Present</div>
+      <p class="o-desc">
+        An interactive tool that turns musical chords into <strong>Fourier epicycles</strong> —
+        linked circles whose combined motion draws waveforms in real time.
+        Play notes on a piano keyboard, hear them synthesized, and explore how harmony
+        looks and sounds across <strong>historical tuning systems</strong> from equal temperament
+        to Pythagorean and meantone.
+      </p>
+    </a>
+
+    <!-- Gravitational Sim Game -->
+    <div class="o-card accent-teal">
+      <span class="o-icon">🪐</span>
+      <div class="o-role">Creator</div>
+      <div class="o-title">Gravitational Simulator Teaching Tool</div>
+      <div class="o-org">Independent Project · 2024–Present</div>
+      <p class="o-desc">
+        I am building an interactive physics puzzle game based on a gravitational simulator.
+        Players adjust masses, velocities, and orbital parameters to solve a series of
+        challenges, with the goal of building intuition for orbital mechanics and
+        gravitational physics. The game is aimed at general audiences.
+      </p>
+      <p class="o-coming">✦ Launching as a standalone website — link coming soon</p>
+    </div>
+
+    <!-- Orbital Resonance Music -->
+    <div class="o-card accent-rose">
+      <span class="o-icon">🎵</span>
+      <div class="o-role">Creator</div>
+      <div class="o-title">Orbital Resonance Music Generator</div>
+      <div class="o-org">Independent Project · 2025–Present</div>
+      <p class="o-desc">
+        I am developing a web-based n-body gravitational simulator that generates music
+        from orbital dynamics. Each orbit produces rhythmic or harmonic events, making
+        the <strong>patterns of resonant planetary systems</strong> audible in real time.
+        I am very interested in the intersection of astrophysics and music,
+        please reach out if you're interested in collaborating!
+      </p>
+      <p class="o-coming">✦ Launching as a standalone website — link coming soon</p>
+    </div>
+
+    <!-- Majors Committee -->
+    <div class="o-card accent-blue">
+      <span class="o-icon">🏛</span>
+      <div class="o-role">Research Representative</div>
+      <div class="o-title">Physics &amp; Astronomy Majors Committee</div>
+      <div class="o-org">Vassar College · 2025–Present</div>
+      <p class="o-desc">
+        I serve as the Research Representative on the Physics &amp; Astronomy Majors Committee,
+        where I represent student interests on matters related to research opportunities,
+        departmental resources, and academic policy. I work to improve
+        <strong>undergraduate access to research positions</strong>,
+        particularly for students earlier in their academic careers.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<div class="contact-strip">
+  <div>
+    <h2>Want to collaborate or connect?</h2>
+    <p>I am happy to hear from students,researchers, educators, or anyone interested in astronomy.</p>
+  </div>
+  <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+    <a href="mailto:tolsen@vassar.edu" class="btn btn-gold">Say hello →</a>
+    <a href="research.html" class="btn btn-ghost">View Research</a>
+  </div>
+</div>
+
+<footer>
+  <p>Theo Olsen &nbsp;·&nbsp; Vassar College &nbsp;·&nbsp;
+    <a href="mailto:tolsen@vassar.edu">tolsen@vassar.edu</a>
+  </p>
+  <p style="margin-top:.4rem;font-size:.62rem;opacity:.6;">
+    <a href="index.html">← Back to home</a>
+  </p>
+</footer>
+
+</body>
+</html>
