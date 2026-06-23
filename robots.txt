@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the0lsen.github.io/sitemap.xml
