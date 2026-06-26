@@ -1082,9 +1082,13 @@
 
     cv.addEventListener('click', e => handleInteract(e.clientX, e.clientY));
     cv.addEventListener('touchstart', e => {
-      e.preventDefault();
       const t = e.touches[0];
-      handleInteract(t.clientX, t.clientY);
+      const canY = canvasY(t.clientY);
+      const hit = iStars.some(s => Math.hypot(t.clientX - s.x, canY - s.y) < 38);
+      if (hit) {
+        e.preventDefault();
+        handleInteract(t.clientX, t.clientY);
+      }
     }, { passive: false });
 
     // ── Spectrum panel ────────────────────────────
