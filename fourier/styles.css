@@ -488,6 +488,12 @@ input[type=range]:focus {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
 
+/* Overtones toggle — greyed out when timbre has no harmonics (e.g. Sine) */
+.ctrl-group.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 /* =============================================
    MOBILE — ROTATE OVERLAY (portrait)
    ============================================= */

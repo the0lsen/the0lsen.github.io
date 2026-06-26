@@ -17,8 +17,13 @@ export const NOTE_COLORS = [
 ];
 
 // Active note entries: { noteKey, freq, pitchClass, color, amplitude }
-let activeNotes  = [];
+let activeNotes   = [];
 let showOvertones = false;
+let currentTimbre = 'sine';
+
+export function setTimbre(t) {
+  currentTimbre = t;
+}
 let startTime    = null;
 let animFrame    = null;
 let canvas       = null;
@@ -131,17 +136,32 @@ function buildCircles(t) {
     });
 
     if (showOvertones) {
-      // First 3 overtones: 2f, 3f, 4f with 1/2, 1/3, 1/4 amplitude
-      for (let k = 2; k <= 4; k++) {
+      // Harmonics shown match what the audio actually synthesizes per timbre.
+      // Sine: no overtones in sound, none in view.
+      // Flute: fundamental + 2nd harmonic at 0.22 relative gain (mirrors audio.js).
+      // Strings: sawtooth series — 2f, 3f, 4f at 1/k amplitude.
+      if (currentTimbre === 'flute') {
         circles.push({
-          freq:  note.freq * k,
-          amp:   (fundamentalR / k) * 0.6,
+          freq:  note.freq * 2,
+          amp:   fundamentalR * 0.22,
           phase: 0,
           color: note.color,
           isOvertone: true,
           label: null
         });
+      } else if (currentTimbre === 'strings') {
+        for (let k = 2; k <= 4; k++) {
+          circles.push({
+            freq:  note.freq * k,
+            amp:   (fundamentalR / k) * 0.6,
+            phase: 0,
+            color: note.color,
+            isOvertone: true,
+            label: null
+          });
+        }
       }
+      // 'sine': no overtones added — toggle is a no-op for this timbre
     }
   }
 

@@ -3,7 +3,7 @@
 import { getFrequency }           from "./tuning.js"
 import { startNote, stopNote, stopAllNotes } from "./audio.js"
 import { init as initFourier, addNote, removeNote, clearNotes,
-         setOvertones, startAnimation, resetTrail, setSpeed }  from "./fourier.js"
+         setOvertones, startAnimation, resetTrail, setSpeed, setTimbre } from "./fourier.js"
 import { init as initWaveform, updateTrail,
          addWaveCard, removeWaveCard, clearWaveCards } from "./waveform.js"
 import { initKeyboard, midiToNoteKey, getNoteInfo, setTuning as setKbTuning, clearAll as clearAllKeys } from "./keyboard.js"
@@ -33,8 +33,18 @@ export function initApp() {
   const tuningSelect   = document.getElementById('tuning-select');
   const timbreSelect   = document.getElementById('timbre-select');
   const overtoneToggle = document.getElementById('overtone-toggle');
+  const overtoneWrap   = document.getElementById('overtone-wrap');
   const speedSlider    = document.getElementById('speed-slider');
   const btnReset       = document.getElementById('btn-reset');
+
+  function syncOvertoneToggle(timbre) {
+    const disabled = timbre === 'sine';
+    overtoneToggle.disabled = disabled;
+    if (overtoneWrap) overtoneWrap.classList.toggle('disabled', disabled);
+  }
+
+  // Sync on init
+  syncOvertoneToggle(currentTimbre);
 
   if (speedSlider) {
     speedSlider.addEventListener('input', () => {
@@ -52,6 +62,8 @@ export function initApp() {
 
   timbreSelect.addEventListener('change', () => {
     currentTimbre = timbreSelect.value;
+    setTimbre(currentTimbre);
+    syncOvertoneToggle(currentTimbre);
     retimbreLiveNotes();
     resetTrail();
   });
