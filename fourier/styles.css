@@ -62,12 +62,26 @@ html, body {
    ============================================= */
 #app {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) 130px minmax(220px, 28vh);
+  grid-template-rows: auto 1fr;
   height: 100vh;
   height: 100dvh;
   width: 100vw;
   gap: 0;
   overflow: hidden;
+}
+
+#app-main {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 130px minmax(220px, 28vh);
+  grid-row: 2;
+  grid-column: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#app-main[hidden],
+#explain-panel[hidden] {
+  display: none;
 }
 
 /* --- Header --- */
@@ -508,6 +522,165 @@ input[type=range]:focus {
 }
 
 /* =============================================
+   VIEW TABS + EXPLAIN PANEL
+   ============================================= */
+#view-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+}
+.view-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.view-tab:hover { color: var(--text); }
+.view-tab.active {
+  background: var(--blue-dim);
+  color: var(--text-bright);
+}
+
+#explain-panel {
+  grid-row: 2;
+  grid-column: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.explain-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.explain-hero { margin-bottom: 1rem; }
+.explain-hero h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.5px;
+  margin-bottom: 0.6rem;
+}
+.explain-hero p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 640px;
+}
+
+.explain-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2.2rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.explain-text h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.8rem;
+  letter-spacing: -0.3px;
+}
+.ex-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #0f1117;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+.explain-text p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 0.7rem;
+  opacity: 0.9;
+}
+.explain-text strong { color: var(--text-bright); font-weight: 600; }
+.explain-text em { color: var(--teal); font-style: normal; }
+
+.explain-canvas-wrap { position: relative; }
+.explain-canvas {
+  display: block;
+  width: 100%;
+  height: 240px;
+  border-radius: var(--radius-md);
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+}
+.explain-caption {
+  position: absolute;
+  bottom: 10px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  pointer-events: none;
+}
+
+.explain-try {
+  list-style: none;
+  margin: 0.4rem 0 1.2rem;
+  padding: 0;
+}
+.explain-try li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  opacity: 0.9;
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+.explain-try li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--blue-primary);
+}
+.explain-cta {
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-bright);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.explain-cta:hover { background: var(--blue-primary); }
+
+@media (max-width: 640px) {
+  .explain-section { grid-template-columns: 1fr; gap: 1.2rem; }
+  .explain-canvas { height: 200px; }
+  .explain-hero h1 { font-size: 24px; }
+}
+
+/* =============================================
    MOBILE — ROTATE OVERLAY (portrait)
    ============================================= */
 #rotate-overlay {
@@ -567,7 +740,10 @@ input[type=range]:focus {
 @media (orientation: landscape) and (max-height: 500px) {
   /* Compress grid rows so the Fourier canvas keeps usable height */
   #app {
-    grid-template-rows: 44px minmax(0, 1fr) 70px 150px;
+    grid-template-rows: 44px 1fr;
+  }
+  #app-main {
+    grid-template-rows: minmax(0, 1fr) 70px 150px;
   }
 
   /* Header: tighten and drop the subtitle text */

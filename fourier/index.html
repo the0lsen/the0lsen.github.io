@@ -46,6 +46,10 @@
           <h1>Fourier Wave Visualizer</h1>
           <div class="subtitle">Harmonic Circle Orbits</div>
         </div>
+        <div id="view-tabs">
+          <button class="view-tab active" data-view="visualizer">Visualizer</button>
+          <button class="view-tab" data-view="explain">Explain</button>
+        </div>
       </div>
 
       <div id="header-controls">
@@ -91,6 +95,8 @@
       </div>
     </header>
 
+    <div id="app-main">
+
     <div id="main-area">
 
       <section id="fourier-panel" aria-label="Fourier circle orbits">
@@ -124,15 +130,115 @@
       <div id="keyboard-container"></div>
     </section>
 
-  </div>
+    </div><!-- /#app-main -->
+
+    <div id="explain-panel" hidden>
+      <div class="explain-inner">
+
+        <header class="explain-hero">
+          <h1>How does this work?</h1>
+          <p>This tool turns music into spinning circles. Below, we build up the idea one step at a time — no advanced math needed, just a little curiosity.</p>
+        </header>
+
+        <section class="explain-section">
+          <div class="explain-text">
+            <h2><span class="ex-num">1</span> What is a sine wave?</h2>
+            <p>Imagine a dot moving around a circle at a steady pace. Now track only its <em>height</em> over time. That gently rising-and-falling curve is a <strong>sine wave</strong> — the purest kind of sound, a single steady tone.</p>
+            <p>The <strong>radius</strong> of the circle sets the wave's <strong>amplitude</strong> (how loud it is). How fast the dot spins sets the <strong>frequency</strong> (how high the pitch is).</p>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="sine"></canvas>
+          </div>
+        </section>
+
+        <section class="explain-section">
+          <div class="explain-text">
+            <h2><span class="ex-num">2</span> Frequency is pitch</h2>
+            <p>Spin the circle <strong>twice as fast</strong> and the wave bunches up — twice as many wiggles in the same time. Your ear hears that as a note exactly <strong>one octave higher</strong>.</p>
+            <p>Here the blue circle spins at one speed, and the gold circle spins twice as fast. Double the frequency, double the pitch class.</p>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="freq"></canvas>
+          </div>
+        </section>
+
+        <section class="explain-section">
+          <div class="explain-text">
+            <h2><span class="ex-num">3</span> Adding waves makes chords</h2>
+            <p>Play two notes at once and their waves <strong>add together</strong>, point by point. Where both push up, the result is taller; where they fight, it shrinks.</p>
+            <p>The gold curve is the sum of the two colored waves. That combined shape is exactly what reaches your ear as a chord.</p>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="add"></canvas>
+          </div>
+        </section>
+
+        <section class="explain-section">
+          <div class="explain-text">
+            <h2><span class="ex-num">4</span> Circles riding on circles</h2>
+            <p>Here's the trick behind this whole tool. Attach a second circle to the edge of the first, and a third to that one. Each spins at its own rate. Follow the very tip of the chain and it traces a surprisingly intricate path.</p>
+            <p>These stacked circles are called <strong>epicycles</strong> — the same picture you see on the main Visualizer tab.</p>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="epi"></canvas>
+          </div>
+        </section>
+
+        <section class="explain-section">
+          <div class="explain-text">
+            <h2><span class="ex-num">5</span> Fourier's big idea</h2>
+            <p>In the 1800s, Joseph Fourier showed something astonishing: <strong>any</strong> repeating wave — even a sharp, jagged one — can be built by stacking enough simple sine waves of the right frequencies and sizes.</p>
+            <p>Watch a flat-topped <strong>square wave</strong> emerge as we add more and more sine "harmonics." More circles, sharper corners.</p>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="series"></canvas>
+            <div class="explain-caption" data-caption="series">1 harmonic</div>
+          </div>
+        </section>
+
+        <section class="explain-section explain-section--final">
+          <div class="explain-text">
+            <h2><span class="ex-num">6</span> Back to music</h2>
+            <p>Every instrument adds its own set of harmonics on top of the fundamental note — that's why a flute and a violin playing the same pitch sound different. This tool lets you see and hear all of it.</p>
+            <ul class="explain-try">
+              <li>Press <strong>C and G together</strong> and watch the combined wave.</li>
+              <li>Turn on <strong>Overtones</strong> to reveal the hidden harmonics.</li>
+              <li>Switch <strong>Timbre</strong> between Sine, Strings, and Flute.</li>
+            </ul>
+            <button class="explain-cta" data-view="visualizer">Back to the Visualizer →</button>
+          </div>
+          <div class="explain-canvas-wrap">
+            <canvas class="explain-canvas" data-anim="epi"></canvas>
+          </div>
+        </section>
+
+      </div>
+    </div><!-- /#explain-panel -->
+
+  </div><!-- /#app -->
 
   <script type="module">
     import { initApp } from "./js/app.js?v=4"
+    import { initExplainer } from "./js/explain.js?v=1"
     initApp()
+    initExplainer()
   </script>
   <script>
     document.getElementById('waves-toggle').addEventListener('click', () => {
       document.getElementById('waves-panel').classList.toggle('open');
+    });
+
+    // View tabs: swap between the visualizer and the explainer
+    const appMain = document.getElementById('app-main');
+    const explainPanel = document.getElementById('explain-panel');
+    function setView(view) {
+      document.querySelectorAll('.view-tab').forEach(b =>
+        b.classList.toggle('active', b.dataset.view === view));
+      appMain.hidden = view !== 'visualizer';
+      explainPanel.hidden = view !== 'explain';
+    }
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
     });
   </script>
 </body>
