@@ -13,6 +13,12 @@ let currentTuning = 'just';
 let currentTimbre = 'sine';
 let _refreshOvertones = () => {};
 
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function overtoneNoteName(baseMidi, k) {
+  const m = Math.round(baseMidi + 12 * Math.log2(k));
+  return NOTE_NAMES[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1);
+}
+
 export function initApp() {
   // ── Canvas elements ──────────────────────────
   const fourierCanvas = document.getElementById('fourier-canvas');
@@ -49,10 +55,10 @@ export function initApp() {
     for (const [noteKey, { midi, freq }] of liveNotes) {
       const info = getNoteInfo(midi, currentTuning);
       if (currentTimbre === 'flute') {
-        overtones.push({ key: `${noteKey}-ov2`, label: `${info.noteName} ×2`, freq: freq * 2, color: info.color });
+        overtones.push({ key: `${noteKey}-ov2`, label: overtoneNoteName(midi, 2), freq: freq * 2, color: info.color });
       } else if (currentTimbre === 'strings') {
         for (let k = 2; k <= 4; k++) {
-          overtones.push({ key: `${noteKey}-ov${k}`, label: `${info.noteName} ×${k}`, freq: freq * k, color: info.color });
+          overtones.push({ key: `${noteKey}-ov${k}`, label: overtoneNoteName(midi, k), freq: freq * k, color: info.color });
         }
       }
     }
@@ -75,14 +81,14 @@ export function initApp() {
 
   overtoneToggle.addEventListener('change', () => {
     setOvertones(overtoneToggle.checked);
-    refreshOvertones();
+    _refreshOvertones();
     resetTrail();
   });
 
   timbreSelect.addEventListener('change', () => {
     currentTimbre = timbreSelect.value;
     setTimbre(currentTimbre);
-    refreshOvertones();
+    _refreshOvertones();
     retimbreLiveNotes();
     resetTrail();
   });
