@@ -487,3 +487,137 @@ input[type=range]:focus {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+
+/* =============================================
+   MOBILE — ROTATE OVERLAY (portrait)
+   ============================================= */
+#rotate-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg-deep);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+#rotate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--blue-primary);
+}
+
+#rotate-content svg {
+  animation: rotateHint 2.4s ease-in-out infinite;
+}
+@keyframes rotateHint {
+  0%, 40%   { transform: rotate(0deg); }
+  60%, 100% { transform: rotate(90deg); }
+}
+
+.rotate-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -0.2px;
+}
+
+.rotate-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Waves toggle button — hidden on desktop, shown in landscape mobile */
+#waves-toggle {
+  display: none;
+}
+
+@media (orientation: portrait) and (max-width: 768px) {
+  #rotate-overlay { display: flex; }
+}
+
+/* =============================================
+   MOBILE — LANDSCAPE LAYOUT (short viewport)
+   ============================================= */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Compress grid rows so the Fourier canvas keeps usable height */
+  #app {
+    grid-template-rows: 44px minmax(0, 1fr) 70px 150px;
+  }
+
+  /* Header: tighten and drop the subtitle text */
+  #header {
+    min-height: 44px;
+    padding: 6px 12px;
+    gap: 10px;
+  }
+  #header-title h1 { font-size: 13px; }
+  #header-title .subtitle { display: none; }
+  .orbit-icon { width: 22px; height: 22px; }
+
+  #header-controls { gap: 8px; }
+  .ctrl-label { display: none; }
+  input[type=range] { width: 90px; }
+
+  /* Main area: full width, no fixed side column */
+  #main-area {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+
+  /* Waves panel becomes a slide-in drawer over the canvas */
+  #waves-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 240px;
+    max-width: 80%;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    z-index: 5;
+    box-shadow: -8px 0 24px rgba(0,0,0,0.5);
+  }
+  #waves-panel.open {
+    transform: translateX(0);
+  }
+
+  /* Drawer handle tab */
+  #waves-toggle {
+    display: block;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 6;
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  #waves-toggle:hover { border-color: var(--blue-primary); color: var(--text); }
+
+  /* Trail canvas: shorter */
+  #trail-panel { /* height handled by grid row */ }
+
+  /* Keyboard: shorter keys (override inline JS-set heights) */
+  #keyboard-panel {
+    min-height: 150px;
+    padding: 8px 12px;
+  }
+  #keyboard-container { min-height: 130px !important; height: 130px !important; }
+  .key.white { height: 130px !important; }
+  .key.black { height: 84px !important; }
+}
