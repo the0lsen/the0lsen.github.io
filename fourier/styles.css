@@ -488,10 +488,23 @@ input[type=range]:focus {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
 
-/* Overtones toggle — greyed out when timbre has no harmonics (e.g. Sine) */
-.ctrl-group.disabled {
-  opacity: 0.35;
-  pointer-events: none;
+/* Overtone section separator and cards */
+.overtone-sep {
+  padding: 6px 12px 4px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-bright);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-deep);
+  opacity: 0.7;
+}
+
+.wave-item.overtone-item {
+  opacity: 0.75;
+  background: rgba(255,255,255,0.015);
 }
 
 /* =============================================

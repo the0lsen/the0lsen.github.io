@@ -5,11 +5,13 @@ import { startNote, stopNote, stopAllNotes } from "./audio.js"
 import { init as initFourier, addNote, removeNote, clearNotes,
          setOvertones, startAnimation, resetTrail, setSpeed, setTimbre } from "./fourier.js"
 import { init as initWaveform, updateTrail,
-         addWaveCard, removeWaveCard, clearWaveCards } from "./waveform.js"
+         addWaveCard, removeWaveCard, clearWaveCards,
+         renderOvertoneSection, clearOvertoneSection } from "./waveform.js"
 import { initKeyboard, midiToNoteKey, getNoteInfo, setTuning as setKbTuning, clearAll as clearAllKeys } from "./keyboard.js"
 
 let currentTuning = 'just';
 let currentTimbre = 'sine';
+let _refreshOvertones = () => {};
 
 export function initApp() {
   // ── Canvas elements ──────────────────────────
@@ -33,18 +35,29 @@ export function initApp() {
   const tuningSelect   = document.getElementById('tuning-select');
   const timbreSelect   = document.getElementById('timbre-select');
   const overtoneToggle = document.getElementById('overtone-toggle');
-  const overtoneWrap   = document.getElementById('overtone-wrap');
   const speedSlider    = document.getElementById('speed-slider');
   const btnReset       = document.getElementById('btn-reset');
 
-  function syncOvertoneToggle(timbre) {
-    const disabled = timbre === 'sine';
-    overtoneToggle.disabled = disabled;
-    if (overtoneWrap) overtoneWrap.classList.toggle('disabled', disabled);
-  }
+  setTimbre(currentTimbre);
 
-  // Sync on init
-  syncOvertoneToggle(currentTimbre);
+  _refreshOvertones = function refreshOvertones() {
+    if (!overtoneToggle.checked || liveNotes.size === 0) {
+      clearOvertoneSection();
+      return;
+    }
+    const overtones = [];
+    for (const [noteKey, { midi, freq }] of liveNotes) {
+      const info = getNoteInfo(midi, currentTuning);
+      if (currentTimbre === 'flute') {
+        overtones.push({ key: `${noteKey}-ov2`, label: `${info.noteName} ×2`, freq: freq * 2, color: info.color });
+      } else if (currentTimbre === 'strings') {
+        for (let k = 2; k <= 4; k++) {
+          overtones.push({ key: `${noteKey}-ov${k}`, label: `${info.noteName} ×${k}`, freq: freq * k, color: info.color });
+        }
+      }
+    }
+    renderOvertoneSection(overtones);
+  };
 
   if (speedSlider) {
     speedSlider.addEventListener('input', () => {
@@ -55,26 +68,28 @@ export function initApp() {
   tuningSelect.addEventListener('change', () => {
     currentTuning = tuningSelect.value;
     setKbTuning(currentTuning);
-    // Restart all active notes with new frequencies
     retuneLiveNotes();
+    _refreshOvertones();
+    resetTrail();
+  });
+
+  overtoneToggle.addEventListener('change', () => {
+    setOvertones(overtoneToggle.checked);
+    refreshOvertones();
     resetTrail();
   });
 
   timbreSelect.addEventListener('change', () => {
     currentTimbre = timbreSelect.value;
     setTimbre(currentTimbre);
-    syncOvertoneToggle(currentTimbre);
+    refreshOvertones();
     retimbreLiveNotes();
-    resetTrail();
-  });
-
-  overtoneToggle.addEventListener('change', () => {
-    setOvertones(overtoneToggle.checked);
     resetTrail();
   });
 
   btnReset.addEventListener('click', () => {
     clearAllKeys();
+    clearOvertoneSection();
     resetTrail();
   });
 }
@@ -91,6 +106,7 @@ function handleNoteOn(noteKey, midi) {
   startNote(freq, noteKey, currentTimbre);
   addNote(noteKey, freq, info.pc);
   addWaveCard(noteKey, info.noteName, freq, info.color, info.cents);
+  _refreshOvertones();
 }
 
 function handleNoteOff(noteKey, midi) {
@@ -98,6 +114,7 @@ function handleNoteOff(noteKey, midi) {
   stopNote(noteKey);
   removeNote(noteKey);
   removeWaveCard(noteKey);
+  _refreshOvertones();
 }
 
 /** Restart all live notes with updated frequencies (after tuning change) */

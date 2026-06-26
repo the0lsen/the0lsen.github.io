@@ -170,8 +170,50 @@ export function clearWaveCards() {
   waveCanvases.clear();
   const items = wavesList.querySelectorAll('.wave-item');
   items.forEach(el => el.remove());
+  wavesList.querySelectorAll('.overtone-sep, .overtone-item').forEach(el => el.remove());
   const empty = document.getElementById('waves-empty');
   if (empty) empty.style.display = '';
+}
+
+/**
+ * Render the overtone section (separator + cards) below the pressed note cards.
+ * @param {Array<{key, label, freq, color}>} overtones
+ */
+export function renderOvertoneSection(overtones) {
+  clearOvertoneSection();
+  if (!overtones || overtones.length === 0) return;
+
+  const sep = document.createElement('div');
+  sep.className = 'overtone-sep';
+  sep.innerHTML = '<span>Overtones</span>';
+  wavesList.appendChild(sep);
+
+  for (const { key, label, freq, color } of overtones) {
+    const safeId = key.replace(/[^a-z0-9]/gi, '_');
+    const item = document.createElement('div');
+    item.className = 'wave-item overtone-item';
+    item.id = `ov-item-${safeId}`;
+    item.innerHTML = `
+      <div class="wave-item-header">
+        <span class="wave-note-name" style="color:${color}bb">${label}</span>
+        <span class="wave-freq">${freq.toFixed(2)} Hz</span>
+      </div>
+      <canvas class="wave-canvas" height="36" id="ov-wc-${safeId}"></canvas>
+    `;
+    wavesList.appendChild(item);
+
+    const wc = item.querySelector('canvas');
+    const wctx = wc.getContext('2d');
+    waveCanvases.set(`ov-${key}`, { canvas: wc, ctx: wctx, color, freq });
+    resizeWaveCanvas(wc);
+  }
+}
+
+export function clearOvertoneSection() {
+  wavesList.querySelectorAll('.overtone-sep, .overtone-item').forEach(el => el.remove());
+  for (const k of [...waveCanvases.keys()]) {
+    if (k.startsWith('ov-')) waveCanvases.delete(k);
+  }
 }
 
 function drawIndividualWaves() {
