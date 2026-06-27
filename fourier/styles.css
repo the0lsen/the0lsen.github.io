@@ -533,6 +533,9 @@ input[type=range]:focus {
   border-radius: 8px;
   padding: 3px;
 }
+
+/* hidden attribute must win over the #header-controls flex rule */
+#header-controls[hidden] { display: none; }
 .view-tab {
   background: transparent;
   border: none;

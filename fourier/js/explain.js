@@ -142,6 +142,12 @@ function animFreq(ctx, w, h, t) {
     ctx.stroke();
     ctx.globalAlpha = 1;
 
+    // horizontal dotted connector from the dot to the wave start
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(dx, dy); ctx.lineTo(x0, cy - R * Math.sin(ang)); ctx.stroke();
+    ctx.setLineDash([]);
+
     ctx.fillStyle = color;
     ctx.font = '11px "Space Mono", monospace';
     ctx.textAlign = 'left';
@@ -248,13 +254,13 @@ function makeSeries(captionEl) {
     const cy = h / 2;
     const A = Math.min(h * 0.3, 50);
     const x0 = 14, x1 = w - 14;
-    const period = 3.0; // seconds per harmonic-count step
+    const period = 0.6; // seconds per harmonic-count step (~5x faster)
     const idx = Math.floor(t / period) % counts.length;
     const N = counts[idx];
 
     if (captionEl) {
       const harmonics = 2 * N - 1; // highest harmonic number used
-      captionEl.textContent = `${N} sine${N > 1 ? 's' : ''} → up to harmonic ${harmonics}`;
+      captionEl.textContent = `${N} sine${N > 1 ? 's' : ''}, up to harmonic ${harmonics}`;
     }
 
     drawAxis(ctx, x0, cy, x1);
@@ -293,22 +299,26 @@ function makeSeries(captionEl) {
 // ── Controller: one per canvas ───────────────────────────────
 function makeController(canvas, drawFn) {
   let raf = null;
-  let start = null;
+  let elapsed = 0;     // virtual time, only advances while playing
+  let lastNow = null;
   let dims = fitCanvas(canvas);
 
   const ro = new ResizeObserver(() => { dims = fitCanvas(canvas); });
   ro.observe(canvas);
 
   function frame(now) {
-    if (start === null) start = now;
-    const t = (now - start) / 1000;
+    // First frame after a (re)start has zero delta, so virtual time is
+    // continuous across pauses — no position jump, no straight-line skip.
+    if (lastNow === null) lastNow = now;
+    elapsed += (now - lastNow) / 1000;
+    lastNow = now;
     dims.ctx.clearRect(0, 0, dims.w, dims.h);
-    drawFn(dims.ctx, dims.w, dims.h, t, canvas);
+    drawFn(dims.ctx, dims.w, dims.h, elapsed, canvas);
     raf = requestAnimationFrame(frame);
   }
 
   return {
-    play()  { if (raf === null) raf = requestAnimationFrame(frame); },
+    play()  { if (raf === null) { lastNow = null; raf = requestAnimationFrame(frame); } },
     pause() { if (raf !== null) { cancelAnimationFrame(raf); raf = null; } },
   };
 }
