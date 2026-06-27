@@ -526,31 +526,31 @@ input[type=range]:focus {
    ============================================= */
 #view-tabs {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   margin-left: 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 3px;
 }
 
 /* hidden attribute must win over the #header-controls flex rule */
 #header-controls[hidden] { display: none; }
 .view-tab {
   background: transparent;
-  border: none;
+  border: 1px solid var(--border-bright);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 600;
   padding: 5px 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
-.view-tab:hover { color: var(--text); }
+.view-tab:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
 .view-tab.active {
   background: var(--blue-dim);
+  border-color: var(--blue-primary);
   color: var(--text-bright);
 }
 
